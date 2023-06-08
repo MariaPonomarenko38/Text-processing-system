@@ -7,9 +7,9 @@ docker pull mariaponomarenko/nlp-system
 ```
 
 2. Run the following command in CLI:
-
+```
 xhost +local:docker
-
+```
 2. Run container specifying PATH to the files:
 
 ```
