@@ -1,4 +1,4 @@
-# Launch Text Preprocessing System:
+# Launch Text Processing System:
 
 1. Pull image from Docker Hub:
 
