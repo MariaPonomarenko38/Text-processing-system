@@ -3,7 +3,7 @@
 1. Pull image from Docker Hub:
 
 ```
-docker pull mariaponomarenko/nlp-system
+docker pull mariaponomarenko/text-system
 ```
 
 2. Run the following command in CLI:
