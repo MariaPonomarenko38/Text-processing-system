@@ -13,5 +13,5 @@ xhost +local:docker
 2. Run container specifying PATH to the files:
 
 ```
-docker run -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v PATH:/src mariaponomarenko/nlp-system
+docker run -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v PATH:/src mariaponomarenko/text-system
 ```
