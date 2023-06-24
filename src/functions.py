@@ -70,31 +70,22 @@ class LDA:
         topic_list = [i for i in range(self.NUM_TOPICS)]
         prob_list = []
 
-        ap = False
         for iter in range(num_iter):
-            if iter == (num_iter - 1):
-                ap = True
-            if len(prob_list) > 0:
-                ap = False
             for doc_idx, doc in enumerate(corpus):
-                doc_prof = np.zeros((1, self.NUM_TOPICS))
                 for i in range(len(doc)):
                     word = doc[i]
                     topic = Z[doc_idx][i]
                     ndk[doc_idx, topic] -= 1
                     nkw[topic, word] -= 1
                     nk[topic] -= 1
-                    p_z = (ndk[doc_idx, :] + self.ALPHA) * (nkw[:, word] + self.BETA) / (nk[:] + self.BETA * self.vocab_size)
+                    left = (nkw[:, word] + self.BETA) / (np.sum(nkw, axis=1) + self.vocab_size * self.BETA)
+                    right = (ndk[0, :] + self.ALPHA) / (np.sum(ndk[0, :]) + self.NUM_TOPICS * self.ALPHA)
+                    p_z = left * right
                     topic = random.choices(topic_list, weights=p_z, k=1)[0]
-                    if ap:
-                        doc_prof += p_z
                     Z[doc_idx][i] = topic
                     ndk[doc_idx, topic] += 1
                     nkw[topic, word] += 1
                     nk[topic] += 1
-                if ap:
-                    doc_prof = doc_prof / len(doc)
-                    prob_list.append(doc_prof)
 
         return Z, ndk, nkw, nk, prob_list
     
@@ -167,13 +158,11 @@ def find_ngrams_keywords(text):
     return keywords
 
 def key_words_extraction(text):
-    text_lda = text.split(' ')
+    text_lda = " ".join(text.split('\n')).split('.')
     df = pd.DataFrame()
     df['text'] = text_lda
     lda = LDA(df['text'].values)
     lda_keywords = lda.produce_keywords()
     ngrams_keywords = find_ngrams_keywords(text)
-    print(ngrams_keywords)
     all_keywords = ", ".join(list(set(lda_keywords + ngrams_keywords)))
     return all_keywords
-
