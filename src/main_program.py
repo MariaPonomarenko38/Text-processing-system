@@ -6,6 +6,8 @@ from functions import *
 from photo_scanning import *
 import sys
 import re
+import docx
+import PyPDF2
 
 from predict import *
 
@@ -357,7 +359,7 @@ class MainWindow(QMainWindow):
         path, _ = QFileDialog.getOpenFileName(self, "Відкрити файл", "", "HTML documents (*.html);Text documents (*.txt);All files (*.*)")
 
         try:
-            if '.jpg' not in path:
+            if '.txt' in path:
                 with open(path, 'rU') as f:
                     text = f.read()
 
@@ -366,11 +368,28 @@ class MainWindow(QMainWindow):
 
         else:
             self.path = path
-            if '.jpg' not in self.path:
+            if '.jpg' in self.path:
+                text = main_func(self.path)
+                self.editor.setText(text)
+                self.update_title()
+            elif '.docx' in self.path:
+                doc = docx.Document(self.path)
+                paragraphs = [p.text for p in doc.paragraphs]
+                text = '\n'.join(paragraphs)
+                
+                self.editor.setText(text)
+                self.update_title()
+            elif '.pdf' in self.path:
+                with open(self.path, 'rb') as file:
+                    reader = PyPDF2.PdfFileReader(file)
+                    text = ''
+                    for page in range(reader.numPages):
+                        page_obj = reader.getPage(page)
+                        text += page_obj.extract_text()
+
                 self.editor.setText(text)
                 self.update_title()
             else:
-                text = main_func(self.path)
                 self.editor.setText(text)
                 self.update_title()
 

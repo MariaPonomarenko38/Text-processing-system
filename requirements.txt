@@ -10,3 +10,5 @@ imutils==0.5.4
 scikit-image==0.20.0
 numpy==1.23.5
 pytesseract==0.3.10
+PyPDF2==3.0.1
+docx==0.2.4
