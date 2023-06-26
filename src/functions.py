@@ -79,7 +79,7 @@ class LDA:
                     nkw[topic, word] -= 1
                     nk[topic] -= 1
                     left = (nkw[:, word] + self.BETA) / (np.sum(nkw, axis=1) + self.vocab_size * self.BETA)
-                    right = (ndk[0, :] + self.ALPHA) / (np.sum(ndk[0, :]) + self.NUM_TOPICS * self.ALPHA)
+                    right = (ndk[doc_idx, :] + self.ALPHA) / (np.sum(ndk[doc_idx, :]) + self.NUM_TOPICS * self.ALPHA)
                     p_z = left * right
                     topic = random.choices(topic_list, weights=p_z, k=1)[0]
                     Z[doc_idx][i] = topic
